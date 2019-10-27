@@ -9,9 +9,9 @@ The source data comes from [this site]
 
 # The implementation
 
-*At the beginning we load the data host [here].
-*We add new variable popup to the data. This variable is used to display more country detail.
-*We load the leaflet map with the data.
+* At the beginning we load the data host [here].
+* We add new variable popup to the data. This variable is used to display more country detail.
+* We load the leaflet map with the data.
 
 
 [leaflet]: https://www.worldometers.info/population/countries-in-africa-by-population/
