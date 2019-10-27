@@ -4,17 +4,29 @@ title: "R Markdown and Leaflet"
 date: "22/10/2019"
 #output: ioslides_presentation
 ---
-This page displays Africa countries and their population.
-Please select a country to see more detail.
+# Africa countries by population.
+
+This page displays Africa countries by their population in October 2019.
+The source data come's from [this website].
+
+Please select a country to for more detail.
 
 
-```{r, echo=FALSE, comment=FALSE, warning=FALSE}
+```{r, echo=FALSE, comment=FALSE, warning=FALSE, results='hide'}
 library(leaflet)
-
+#Loading the data
+#The data will be downloaded if not found in the folder
 #Download the data
+dataUrl <- "https://raw.githubusercontent.com/Chinasa1/DataProductsWeek2/master/CountryPopulation.csv"
+
+fileName <- "CountryPopulation.csv"
+
+if(!file.exists(fileName)){
+  download.file(dataUrl, fileName, method = "curl")
+}
+
 
 #read the data
-fileName <- "CountryPopulation.csv"
 countries <- read.csv(fileName, sep=";")
 
 #Let check the content of the data
@@ -29,25 +41,15 @@ countries$Population <- as.integer(as.character(countries$Population))
 #we add new variable popup message to the data
 countries$popup <- apply(countries, 1 ,function(x) paste("Country: ", x[1], "<br>ISO: ",x[2],"<br>Population: ",format( as.integer(x[5]), decimal.mark=",",big.mark=" ", small.interval=3), "<br>Density: ",x[6], sep = "")) 
 
+
+
+```
+```{r, echo=FALSE, comment=FALSE, warning=FALSE}
 #Display the countries with the cercle for the population
 countries %>%
   leaflet() %>%
   addTiles() %>%
-  addCircles(weight = 1, radius = sqrt(countries$Population) *30, popup = countries$popup)
-
-#my_map <- leaflet() %>% 
- # addTiles()
-
-
-#my_map <- my_map %>%
-#  addMarkers(lat=issLat, lng=issLng, 
-#            popup="Iss 25544 Location")
-#my_map
-
-
+  addCircles(weight = 1, lng = ~lng, lat = ~lat, radius = sqrt(countries$Population) *30, popup = countries$popup)
 ```
 
-# Explanation
-We load the country data which can be found here.
-
-We add a new variable to the popup to the variable by concatenate the variable from the dataset.
+[this website]: https://www.worldometers.info/population/countries-in-africa-by-population/
